@@ -13,7 +13,6 @@ UserChat.init(
         },
         user_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: "user",
                 key: "id"
@@ -21,7 +20,6 @@ UserChat.init(
         },
         chat_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: "chat",
                 key: "id"
