@@ -16,10 +16,10 @@ User.init(
             allowNull: false
         },
         password: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                isLen: [4]
+                len: [4]
             }
         }
     },
