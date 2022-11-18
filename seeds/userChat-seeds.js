@@ -34,7 +34,7 @@ const userChatsData = [
         chat_id: "3"
     },
     {
-        user_id: "8",
+        user_id: "9",
         chat_id: "3"
     },
 ]
