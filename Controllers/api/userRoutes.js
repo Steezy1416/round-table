@@ -26,17 +26,29 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     User.findAll({
         where: {
-            id: req.params.id
+            id: 1
         },
         attributes: ["id", "username", "password"],
         include: [
             {
                 model: Chat,
-                attributes: ["id", "chat_name"]
-            },
-            {
-                model: Message,
-                attributes: ["id", "text_message"]
+                attributes: ["id", "chat_name"],
+                include: [
+                    {
+                        model: User,
+                        attributes: ["id", "username"]
+                    },
+                    {
+                        model: Message,
+                        attributes: ["id", "text_message", "user_id"],
+                        include: [
+                            {
+                                model: User,
+                                attributes: ["id", "username"]
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     })
