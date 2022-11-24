@@ -1,13 +1,13 @@
-<nav class="navbar">
+<nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}"{{/with}}>
     <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
     <ul class="navbar-nav">
         {{#each globalUserData.chats}}
-        <li class="nav-item" id-chat_num="{{id}}">{{chat_name}}</li>
+        <li class="nav-item" data-chat_num="{{id}}" onclick="selectChat(event)">{{chat_name}}</li>
         {{/each}}
     </ul>
 </nav>
 
-<section class="chat-info">
+<section class="chat-info" {{#with data}} data-chat_id="{{id}}"{{/with}}>
     <div>
         <p class="info-title container">{{data.chat_name}}</p>
     </div>
@@ -17,13 +17,13 @@
     <div class="user-container container">
         <ul class="user-list">
             {{#each data.users}}
-            <li class="user">{{username}}</li>
+            <li class="user" data-users-ids="{{id}}">{{username}}</li>
             {{/each}}
         </ul>
     </div>
 
     <div>
-        <button class="container leave-btn">Leave Chat</button>
+        <button class="container leave-btn" onclick="leaveChat()">Leave Chat</button>
     </div>
 </section>
 
@@ -37,8 +37,10 @@
         {{/each}}
     </ul>
 
-    <form class="message-input-form">
+    <form class="message-input-form" onsubmit="postTextMessage(event)">
         <input type="text" class="message-input" placeholder="Enter Message">
         <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
     </form>
 </main>
+
+<script src="/javascript/channel.js"></script>

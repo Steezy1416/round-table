@@ -25,7 +25,7 @@ router.get("/", (req,res) => {
     .then(userData => {
         const data = userData.map(user => user.get({plain: true}))
 
-        // console.log(data[0])
+        //saves data into global variable to use in chat call
         globalUserData = data
         res.render("dashboard", data[0])
     })
@@ -57,10 +57,7 @@ router.get("/channel/:id", (req, res) => {
     })
     .then(chatData => {
         const data = chatData.map(chat => chat.get({plain: true}))
-
-        console.log({data})
-        
-        console.log(globalUserData[0].chats)
+    
         res.render("channel", {data: data[0], globalUserData: globalUserData[0]})
     })
 })
