@@ -1,9 +1,10 @@
+// Set up model to include user and chat
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../Config/connection');
 
-class Message extends Model {}
+class File extends Model {}
 
-Message.init(
+File.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,7 +12,11 @@ Message.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    text_message: {
+    file_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    file_path: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -36,8 +41,8 @@ Message.init(
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: 'message',
+    modelName: 'file',
   }
 );
 
-module.exports = Message;
+module.exports = File;
