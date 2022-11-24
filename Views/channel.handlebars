@@ -1,7 +1,7 @@
 <nav class="navbar">
     <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
     <ul class="navbar-nav">
-        {{#each chats}}
+        {{#each globalUserData.chats}}
         <li class="nav-item" id-chat_num="{{id}}">{{chat_name}}</li>
         {{/each}}
     </ul>
@@ -9,17 +9,15 @@
 
 <section class="chat-info">
     <div>
-        <p class="info-title container">{{chat_name}}</p>
+        <p class="info-title container">{{data.chat_name}}</p>
     </div>
 
-    <p class="container users-title">{{username}}</p>
+    <p class="container users-title">Users</p>
 
     <div class="user-container container">
         <ul class="user-list">
-            {{#each chats}}
-            {{#each users}}
+            {{#each data.users}}
             <li class="user">{{username}}</li>
-            {{/each}}
             {{/each}}
         </ul>
     </div>
@@ -31,13 +29,11 @@
 
 <main>
     <ul class="message-container">
-        {{#each chats}}
-        {{#each messages}}
+        {{#each data.messages}}
         <li class="text_message">
-            <p class="message-user">{{username}} <span class="date">90/40/11</span></p>
+            <p class="message-user">{{#with user}}{{username}}{{/with}} <span class="date">90/40/11</span></p>
             <p class="message">{{text_message}}</p>
         </li>
-        {{/each}}
         {{/each}}
     </ul>
 
