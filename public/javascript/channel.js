@@ -94,7 +94,14 @@ async function leaveChat() {
         document.location.replace("/dashboard")
         document.location.reload()
         //goes back to the channels and selects the first channel that the user is in
-        document.location.replace(`/dashboard/channel/${newChatList[0]}`)
+        
+        //if there is no chats it will take user back to dashboard
+        if(newChatList[0] === undefined){
+            document.location.replace("/dashboard")
+        }
+        else {
+            document.location.replace(`/dashboard/channel/${newChatList[0]}`)
+        }
 
     }
 
