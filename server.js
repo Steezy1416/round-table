@@ -41,6 +41,12 @@ sequelize.sync({force: false})
                 socket.to(room).emit("receive-message", (message))
                 console.log(`Message is ${message}`)
             })
+
+            //removes user
+            socket.on("left-chat", ({room, user}) => {
+                socket.to(room).emit("remove-user", (user))
+                console.log(`${user} has left the chat`)
+            })
         })
     })
     

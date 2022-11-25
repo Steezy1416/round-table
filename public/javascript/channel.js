@@ -3,12 +3,12 @@ const socket = io("http://localhost:3001")
 //joins the room
 async function joinRoom() {
     const input = document.querySelector(".message-input")
-        console.log(input)
-        input.focus()
+    console.log(input)
+    input.focus()
     const room = document.querySelector(".info-title").innerText
     const answer = await socket.emit("join-room", room)
-    
-    if(answer.ok){
+
+    if (answer.ok) {
         console.log(room)
         console.log(answer)
     }
@@ -19,12 +19,23 @@ socket.on("receive-message", message => {
     showMessage(message)
 })
 
+socket.on("remove-user", user => {
+    userLeftMessage(user)
+    removeUserFromList(user)
+})
+
+//removes user from user list when they leave the chat
+const removeUserFromList = user => {
+    const li = [...document.querySelectorAll(".user")];
+    li.forEach(elem => {
+        if (elem.innerText == user) elem.parentNode.removeChild(elem);
+    });
+}
+
 //lets you select different chats inside of the channels page
 async function selectChat(event) {
-    //gets chat id from the data attribute
     const chat_id = event.target.getAttribute("data-chat_num")
 
-    //goes to different channel with that id as the param
     const response = await fetch(`/dashboard/channel/${chat_id}`, {
         method: "GET",
         headers: {
@@ -55,7 +66,22 @@ const showMessage = message => {
     listItem.append(messageUser, messageParagraph)
     console.log(listItem)
     messageContainer.append(listItem)
-} 
+}
+
+//displays text when user leaves chat
+const userLeftMessage = user => {
+    let messageContainer = document.querySelector(".message-container")
+
+    let listItem = document.createElement("li")
+    listItem.classList.add("text_message")
+
+    let messageParagraph = document.createElement("p")
+    messageParagraph.className = "message"
+    messageParagraph.innerText = `${user} has left the chat...`
+
+    listItem.append(messageParagraph)
+    messageContainer.append(listItem)
+}
 
 //post text message to database
 async function postTextMessage(event) {
@@ -81,51 +107,47 @@ async function postTextMessage(event) {
         message
     }
 
-    if(response.ok){
+    if (response.ok) {
         socket.emit("message", data)
         showMessage(message)
         document.querySelector(".message-input").value = ''
     }
 }
 
-//remove user from chat
+//changes channels when you leave a chat
+const changeChannel = newChatList => {
+    document.location.replace("/dashboard")
+    document.location.reload()
+
+    //if there is no chats it will take user back to dashboard
+    if (newChatList[0] === undefined) {
+        document.location.replace("/dashboard")
+    }
+    else {
+        document.location.replace(`/dashboard/channel/${newChatList[0]}`)
+    }
+}
+
+//remove user from chat form databse
 async function leaveChat() {
 
     const chat_id = document.querySelector(".chat-info").getAttribute("data-chat_id")
-
     const user_id = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
 
-
-    ///
-    ///Gets a list of the user ids and put them inside an array
     const userArr = Array.from(document.querySelectorAll('[data-users-ids]'));
-
     const usersList = []
-
-    //for each user get its id value 
     userArr.forEach(user => {
         usersList.push(parseInt(user.attributes[1].value))
     })
-
-    //filter out the logged in user from the user list arr
     const newUserList = usersList.filter(users => users != user_id)
-    ///
 
 
-    ///
-    ///gets a list of the chat ids
     const chatArr = Array.from(document.querySelectorAll('[data-chat_num]'));
-
     const chatList = []
-
-    //for each chat get its id value
     chatArr.forEach(chat => {
         chatList.push(chat.attributes[1].value)
     })
-
-    //filter out chat that the user will leave
     const newChatList = chatList.filter(chats => chats != chat_id)
-    ///
 
 
     const response = await fetch(`/api/chats/${chat_id}`, {
@@ -139,20 +161,18 @@ async function leaveChat() {
     })
 
     if (response.ok) {
-        //when user leaves chat, goes to dashboard to get the new chat values
-        document.location.replace("/dashboard")
-        document.location.reload()
-        //goes back to the channels and selects the first channel that the user is in
-        
-        //if there is no chats it will take user back to dashboard
-        if(newChatList[0] === undefined){
-            document.location.replace("/dashboard")
-        }
-        else {
-            document.location.replace(`/dashboard/channel/${newChatList[0]}`)
+
+        const room = document.querySelector(".info-title").innerText
+        const user = document.querySelector(".navbar").getAttribute("data-user_name")
+
+        const data = {
+            room: room,
+            user: user
         }
 
+        socket.emit("left-chat", data)
+        changeChannel(newChatList)
     }
 }
-
 joinRoom()
+

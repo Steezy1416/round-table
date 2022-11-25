@@ -1,4 +1,4 @@
-<nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}"{{/with}}>
+<nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}" data-user_name="{{username}}"{{/with}}>
     <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
     <ul class="navbar-nav">
         {{#each globalUserData.chats}}
