@@ -1,6 +1,18 @@
 const socket = io("http://localhost:3001")
 
+//joins the room
+async function joinRoom() {
+    const room = document.querySelector(".info-title").innerText
+    const answer = await socket.emit("join-room", room)
+    
+    if(answer.ok){
+        console.log(room)
+        console.log(answer)
+    }
+}
+
 socket.on("receive-message", message => {
+    console.log("message received")
     showMessage(message)
 })
 
@@ -8,8 +20,6 @@ socket.on("receive-message", message => {
 async function selectChat(event) {
     //gets chat id from the data attribute
     const chat_id = event.target.getAttribute("data-chat_num")
-
-    const roomTitle = event.target.innerText
 
     //goes to different channel with that id as the param
     const response = await fetch(`/dashboard/channel/${chat_id}`, {
@@ -49,6 +59,7 @@ async function postTextMessage(event) {
     event.preventDefault()
     const message = document.querySelector(".message-input").value.trim()
     const chat_id = parseInt(window.location.toString().split("/")[5])
+    const room = document.querySelector(".info-title").innerText
 
     const response = await fetch("/api/messages", {
         method: "POST",
@@ -62,8 +73,13 @@ async function postTextMessage(event) {
         }
     })
 
+    const data = {
+        room,
+        message
+    }
+
     if(response.ok){
-        socket.emit("message", message)
+        socket.emit("message", data)
         showMessage(message)
     }
 }
@@ -133,6 +149,6 @@ async function leaveChat() {
         }
 
     }
-
-
 }
+
+joinRoom()

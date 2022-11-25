@@ -4,9 +4,6 @@ const socket = io("http://localhost:3001")
 async function selectChat(event){
     const chat_id = event.target.getAttribute("data-chat_num")
 
-    const roomName = event.target.innerText
-    console.log(roomName)
-
     const response = await fetch(`/dashboard/channel/${chat_id}`, {
         method: "GET",
         headers: {

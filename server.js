@@ -21,16 +21,28 @@ app.use(require("./Controllers/index"))
 
 sequelize.sync({force: false})
 .then(() => {
-    server.listen(PORT, () => console.log("Server is now online"))
+    server.listen(PORT, () => {
 
-    io.on("connection", (socket) => {
-        console.log("User has connected to app")
-        console.log(socket.id)
+        console.log("Server is now online")
 
-        socket.on("message", message => {
-            socket.broadcast.emit("receive-message", message)
+        io.on("connection", (socket) => {
+            console.log("User has connected to app")
+            console.log(socket.id)
+    
+            //joins room
+            socket.on("join-room", room => {
+                socket.join(room)
+                console.log(`User joined room ${room}`)
+            })
+    
+            //sends message
+            socket.on("message", ({room, message}) => {
+                socket.to(room).emit("receive-message", (message))
+                console.log(`Message is ${message}`)
+            })
         })
     })
+    
 })
 
 
