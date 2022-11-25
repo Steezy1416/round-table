@@ -2,6 +2,9 @@ const socket = io("http://localhost:3001")
 
 //joins the room
 async function joinRoom() {
+    const input = document.querySelector(".message-input")
+        console.log(input)
+        input.focus()
     const room = document.querySelector(".info-title").innerText
     const answer = await socket.emit("join-room", room)
     
@@ -81,6 +84,7 @@ async function postTextMessage(event) {
     if(response.ok){
         socket.emit("message", data)
         showMessage(message)
+        document.querySelector(".message-input").value = ''
     }
 }
 
