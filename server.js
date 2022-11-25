@@ -2,6 +2,7 @@ const express = require("express")
 const sequelize = require("./Config/connection")
 const path = require("path")
 const exphbs = require("express-handlebars")
+const helpers = require("./utils/formater")
 
 const app = express()
 const server = require("http").createServer(app)
@@ -9,7 +10,7 @@ const io = require("socket.io")(server)
 
 const PORT = process.env.PORT || 3001
 
-const hbs = exphbs.create({})
+const hbs = exphbs.create({helpers})
 app.engine("handlebars", hbs.engine)
 app.set("view engine", "handlebars")
 
