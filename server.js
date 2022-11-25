@@ -4,6 +4,9 @@ const path = require("path")
 const exphbs = require("express-handlebars")
 
 const app = express()
+const server = require("http").createServer(app)
+const io = require("socket.io")(server)
+
 const PORT = process.env.PORT || 3001
 
 const hbs = exphbs.create({})
@@ -18,5 +21,16 @@ app.use(require("./Controllers/index"))
 
 sequelize.sync({force: false})
 .then(() => {
-    app.listen(PORT, () => console.log("Server is now online"))
+    server.listen(PORT, () => console.log("Server is now online"))
+
+    io.on("connection", (socket) => {
+        console.log("User has connected to app")
+        console.log(socket.id)
+
+        socket.on("message", message => {
+            socket.broadcast.emit("receive-message", message)
+        })
+    })
 })
+
+

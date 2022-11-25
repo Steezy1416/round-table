@@ -1,7 +1,15 @@
+const socket = io("http://localhost:3001")
+
+socket.on("receive-message", message => {
+    showMessage(message)
+})
+
 //lets you select different chats inside of the channels page
 async function selectChat(event) {
     //gets chat id from the data attribute
     const chat_id = event.target.getAttribute("data-chat_num")
+
+    const roomTitle = event.target.innerText
 
     //goes to different channel with that id as the param
     const response = await fetch(`/dashboard/channel/${chat_id}`, {
@@ -15,12 +23,32 @@ async function selectChat(event) {
     }
 }
 
-//post text message
+//displays message on screen
+const showMessage = message => {
+    let messageContainer = document.querySelector(".message-container")
+
+    let listItem = document.createElement("li")
+    listItem.classList.add("text_message")
+
+    let messageUser = document.createElement("p")
+    messageUser.classList.add("message-user")
+    messageUser.innerText = "Spiderman"
+
+    let messageParagraph = document.createElement("p")
+    messageParagraph.className = "message"
+    messageParagraph.innerText = message
+
+    console.log(listItem)
+    listItem.append(messageUser, messageParagraph)
+    console.log(listItem)
+    messageContainer.append(listItem)
+} 
+
+//post text message to database
 async function postTextMessage(event) {
     event.preventDefault()
     const message = document.querySelector(".message-input").value.trim()
     const chat_id = parseInt(window.location.toString().split("/")[5])
-    console.log(message)
 
     const response = await fetch("/api/messages", {
         method: "POST",
@@ -34,8 +62,9 @@ async function postTextMessage(event) {
         }
     })
 
-    if (response.ok) {
-        document.location.reload()
+    if(response.ok){
+        socket.emit("message", message)
+        showMessage(message)
     }
 }
 
