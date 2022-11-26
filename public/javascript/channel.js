@@ -89,11 +89,16 @@ const showMessage = message => {
     messageUser.classList.add("message-user")
     messageUser.innerText = "Spiderman"
 
+    let date = document.createElement("span")
+    date.className = "date"
+    date.innerText = "90/40/11"
+
     let messageParagraph = document.createElement("p")
     messageParagraph.className = "message"
     messageParagraph.innerText = message
 
     console.log(listItem)
+    messageUser.append(date)
     listItem.append(messageUser, messageParagraph)
     console.log(listItem)
     messageContainer.append(listItem)
