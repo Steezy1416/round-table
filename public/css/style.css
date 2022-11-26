@@ -62,11 +62,40 @@ main {
     border-radius: 15px;
     background-color: #424240;
     text-align: center;
+    position: relative;
 }
 
 .nav-item:hover {
     border-radius: 20px;
     background-color: #ad8b58;
+}
+
+.active::before,
+.active::after {
+    content: "";
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 15px;
+}
+
+.active::after {
+    background: white;
+    animation: pulse 1000ms;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(1.35);
+        opacity: 0;
+    }
 }
 
 /* =========================================================

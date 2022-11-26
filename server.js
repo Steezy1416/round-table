@@ -38,7 +38,9 @@ sequelize.sync({force: false})
     
             //sends message
             socket.on("message", ({room, message}) => {
-                socket.to(room).emit("receive-message", (message))
+                socket.to(room).emit("receive-message",message)
+                
+                socket.broadcast.emit("notification", room)
                 console.log(`Message is ${message}`)
             })
 

@@ -14,11 +14,42 @@ async function joinRoom() {
     }
 }
 
+//displays new message
 socket.on("receive-message", message => {
     console.log("message received")
     showMessage(message)
 })
 
+//notifies user when they recieve a message
+socket.on("notification", room => {
+    let interval  = 0
+    const word = room.split(" ")
+    const formatedName = []
+    word.forEach(letter => {
+        formatedName.push(letter[0])
+    });
+    const roomTitle = formatedName.filter((letter, index) => index < 2).join('')
+
+    const li = [...document.querySelectorAll(".nav-item")];
+    console.log(roomTitle)
+    let listElement = ''
+    li.forEach(elem => {
+        if (elem.innerText == roomTitle){
+            listElement = elem
+        };
+    });
+    
+    const timer = setInterval(() => {
+        listElement.classList.add("active")
+        interval += 1
+        if(interval === 13){
+            clearInterval(timer)
+            listElement.classList.remove("active")
+        }
+    }, 300)
+})
+
+//removes user from chat list and user left chat message
 socket.on("remove-user", user => {
     userLeftMessage(user)
     removeUserFromList(user)
