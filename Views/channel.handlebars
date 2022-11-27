@@ -1,13 +1,14 @@
-<nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}" data-user_name="{{username}}"{{/with}}>
+<nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}" data-user_name="{{username}}" {{/with}}>
     <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
     <ul class="navbar-nav">
         {{#each globalUserData.chats}}
-        <li class="nav-item" data-chat_num="{{id}}" data-chatName="{{chat_name}}" onclick="selectChat(event)">{{formatChatName chat_name}}</li>
+        <li class="nav-item" data-chat_num="{{id}}" data-chatName="{{chat_name}}" onclick="selectChat(event)">
+            {{formatChatName chat_name}}</li>
         {{/each}}
     </ul>
 </nav>
 
-<section class="chat-info" {{#with data}} data-chat_id="{{id}}"{{/with}}>
+<section class="chat-info" {{#with data}} data-chat_id="{{id}}" {{/with}}>
     <div>
         <p class="info-title container">{{data.chat_name}}</p>
     </div>
@@ -30,17 +31,24 @@
 <main>
     <ul class="message-container">
         {{#each data.messages}}
-        <li class="text_message">
+        <li class="text_message" data-message_id="{{id}}">
             <p class="message-user">{{#with user}}{{username}}{{/with}} <span class="date">90/40/11</span></p>
-            <p class="message">{{text_message}}</p>
+            <p class="message" data-message_id="{{id}}">{{text_message}}</p>
         </li>
         {{/each}}
     </ul>
 
-    <form class="message-input-form" onsubmit="postTextMessage(event)">
-        <input type="text" class="message-input" placeholder="Enter Message">
-        <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-    </form>
+    <div class="form-container">
+        <form class="message-input-form" onsubmit="postTextMessage(event)">
+            <input type="text" class="message-input" placeholder="Enter Message">
+            {{!-- <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button> --}}
+        </form>
+
+        <form class="file-form">
+            <input type="file" class="file-input hide" accept="image/png, image/jpg">
+            <button type="submit" class="file-btn" onclick="selectFile(event)"><i class="fa-solid fa-paperclip"></i></button>
+        </form>
+    </div>
 </main>
 
 <script src="/socket.io/socket.io.js"></script>

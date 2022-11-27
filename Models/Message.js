@@ -12,7 +12,7 @@ Message.init(
             autoIncrement: true
         },
         text_message: {
-            type: DataTypes.STRING,
+            type: DataTypes.BLOB("long"),
             allowNull: false
         },
         user_id: {

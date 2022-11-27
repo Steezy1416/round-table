@@ -211,8 +211,12 @@ main {
     color: lightgrey;
 }
 
-.message-input {
+.message-input-form {
     width: 90%;
+}
+
+.message-input {
+    width: 100%;
     font-size: 20px;
     padding: 10px;
     border-radius: 15px;
@@ -239,3 +243,46 @@ main {
     margin-left: 10px;
 }
 
+/* =========================================================
+
+
+sending files
+
+========================================================= */
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hide {
+    display: none;
+}
+
+.file-form {
+    display: inline;
+}
+
+.file-btn {
+    background: none;
+    border: none;
+    color: lightgray;
+    font-size: 25px;
+    text-align: center;
+    margin-left: 30px;
+}
+
+.file-btn:hover {
+    color: white;
+}
+
+
+.display-image{
+    width: 400px;
+    height: 225px;
+    border-radius: 15px;
+    background-position: center;
+    background-size: cover;
+    margin: 10px 0;
+  }

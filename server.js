@@ -3,6 +3,7 @@ const sequelize = require("./Config/connection")
 const path = require("path")
 const exphbs = require("express-handlebars")
 const helpers = require("./utils/formater")
+const bodyParser = require("body-parser")
 
 const app = express()
 const server = require("http").createServer(app)
@@ -14,8 +15,11 @@ const hbs = exphbs.create({helpers})
 app.engine("handlebars", hbs.engine)
 app.set("view engine", "handlebars")
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+// app.use(express.json())
+// app.use(express.urlencoded({ extended: false}))
 app.use(express.static(path.join(__dirname, "public")))
 
 app.use(require("./Controllers/index"))
@@ -42,6 +46,11 @@ sequelize.sync({force: false})
                 
                 socket.broadcast.emit("notification", room)
                 console.log(`Message is ${message}`)
+            })
+
+            socket.on("file-message", ({room, file}) => {
+                socket.to(room).emit("receive-file", file)
+                console.log("file sent")
             })
 
             //removes user

@@ -3,15 +3,64 @@ const socket = io("http://localhost:3001")
 //joins the room
 async function joinRoom() {
     const input = document.querySelector(".message-input")
-    console.log(input)
     input.focus()
     const room = document.querySelector(".info-title").innerText
     const answer = await socket.emit("join-room", room)
+
+    const li = [...document.querySelectorAll(".message")];
+    const imagePost = []
+    li.forEach(elem => {
+        if (elem.innerText.split("(")[0] == "url") {
+            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText })
+        };
+    });
+
+    convertFile(imagePost)
 
     if (answer.ok) {
         console.log(room)
         console.log(answer)
     }
+}
+
+const convertFile = imagePost => {
+
+    imagePost.forEach((file, index) => {
+        const { id, text } = imagePost[index]
+
+        const post = document.querySelector(`[data-message_id="${id}"]`)
+
+        let child = post.lastElementChild
+        while (child) {
+            post.removeChild(child)
+            child = post.lastElementChild
+        }
+
+        let messageUser = document.createElement("p")
+        messageUser.classList.add("message-user")
+        messageUser.innerText = "Spiderman"
+
+        let date = document.createElement("span")
+        date.className = "date"
+        date.innerText = "90/40/11"
+
+        let displayImage = document.createElement("div")
+        displayImage.className = "message display-image"
+        displayImage.style.backgroundImage = `${text}`
+
+        messageUser.append(date)
+        post.append(messageUser, displayImage)
+
+        async function convertToBlob(text){
+            console.log(text)
+            const base64 = await fetch(text)
+            const blob = await base64.blob()
+            reader.readAsDataURL((blob))
+        }
+
+        convertToBlob(text)
+
+    })
 }
 
 //displays new message
@@ -22,7 +71,7 @@ socket.on("receive-message", message => {
 
 //notifies user when they recieve a message
 socket.on("notification", room => {
-    let interval  = 0
+    let interval = 0
     const word = room.split(" ")
     const formatedName = []
     word.forEach(letter => {
@@ -34,15 +83,15 @@ socket.on("notification", room => {
     console.log(roomTitle)
     let listElement = ''
     li.forEach(elem => {
-        if (elem.innerText == roomTitle){
+        if (elem.innerText == roomTitle) {
             listElement = elem
         };
     });
-    
+
     const timer = setInterval(() => {
         listElement.classList.add("active")
         interval += 1
-        if(interval === 13){
+        if (interval === 13) {
             clearInterval(timer)
             listElement.classList.remove("active")
         }
@@ -210,5 +259,112 @@ async function leaveChat() {
         changeChannel(newChatList)
     }
 }
+
+const selectFile = (event) => {
+    event.preventDefault()
+    const input = document.querySelector(".file-input")
+    input.click()
+
+}
+
+const fileInput = document.querySelector(".file-input")
+
+fileInput.addEventListener("change", function () {
+
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
+        const uploaded_image = reader.result
+
+        let messageContainer = document.querySelector(".message-container")
+
+        let listItem = document.createElement("li")
+        listItem.classList.add("text_message")
+
+        let messageUser = document.createElement("p")
+        messageUser.classList.add("message-user")
+        messageUser.innerText = "Spiderman"
+
+        let date = document.createElement("span")
+        date.className = "date"
+        date.innerText = "90/40/11"
+
+        let displayImage = document.createElement("div")
+        displayImage.className = "message display-image"
+        displayImage.style.backgroundImage = `url(${uploaded_image})`
+
+        messageUser.append(date)
+        listItem.append(messageUser, displayImage)
+        messageContainer.append(listItem)
+        postFileMessage(uploaded_image)
+
+    })
+    reader.readAsDataURL(this.files[0])
+})
+
+async function postFileMessage(uploaded_image) {
+    console.log(uploaded_image)
+    const message = `url(${uploaded_image})`
+    const chat_id = parseInt(window.location.toString().split("/")[5])
+    const room = document.querySelector(".info-title").innerText
+
+    const response = await fetch("/api/messages", {
+        method: "POST",
+        body: JSON.stringify({
+            text_message: message,
+            user_id: 1,
+            chat_id: chat_id
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    const data = {
+        room: room,
+        file: message
+    }
+
+    if (response.ok) {
+        socket.emit("file-message", data)
+    }
+}
+
+socket.on("receive-file", file => {
+    console.log("Received file")
+    showFile(file)
+})
+
+const showFile = file => {
+    let messageContainer = document.querySelector(".message-container")
+
+    let listItem = document.createElement("li")
+    listItem.classList.add("text_message")
+
+    let messageUser = document.createElement("p")
+    messageUser.classList.add("message-user")
+    messageUser.innerText = "Spiderman"
+
+    let date = document.createElement("span")
+    date.className = "date"
+    date.innerText = "90/40/11"
+
+    let displayImage = document.createElement("div")
+    displayImage.className = "message display-image"
+    displayImage.style.backgroundImage = `${file}`
+
+    messageUser.append(date)
+    listItem.append(messageUser, displayImage)
+    messageContainer.append(listItem)
+    
+    async function convertToBlob(file){
+        console.log(file)
+        const base64 = await fetch(file)
+        const blob = await base64.blob()
+        reader.readAsDataURL((blob))
+    }
+
+    convertToBlob(file)
+}
+
 joinRoom()
 
