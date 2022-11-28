@@ -1,17 +1,17 @@
-const { Chat } = require('../Models');
+const {Chat} = require("../Models")
 
 const chatData = [
-  {
-    chat_name: 'Avengers',
-  },
-  {
-    chat_name: 'Justice League',
-  },
-  {
-    chat_name: 'Team 2 fan club',
-  },
-];
+    {
+        chat_name: "Avengers"
+    },
+    {
+        chat_name: "Justice League"
+    },
+    {
+        chat_name: "Team 2 fan club"
+    },
+]
 
-const seedChats = () => Chat.bulkCreate(chatData);
+const seedChats = () => Chat.bulkCreate(chatData)
 
-module.exports = seedChats;
+module.exports = seedChats

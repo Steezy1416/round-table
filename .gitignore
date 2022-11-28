@@ -1,2 +1,9 @@
 node_modules
 .DS_Store
+.env
+placeholder.html
+placeholder.css
+placeholder.js
+setup.html
+setup.css
+setup.js

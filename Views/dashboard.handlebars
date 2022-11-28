@@ -1,57 +1,62 @@
-<nav class="navbar">
-  <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
-  <ul class="navbar-nav">
-    {{#each chats}}
-      <li class="nav-item">{{chat_name}}</li>
-    {{/each}}
-  </ul>
-</nav>
+<div class="main-wrapper">
 
-<section class="chat-info">
-  <div>
-    <p class="info-title container">{{chat_name}}</p>
-  </div>
-
-  <p class="container users-title">{{username}}</p>
-
-  <div class="user-container container">
-    <ul class="user-list">
+  <nav class="navbar">
+    <button class="new-chat icon">&#xF4FD;</button>
+    <ul class="navbar-nav">
       {{#each chats}}
-        {{#each users}}
-          <li class="user">{{username}}</li>
+        <li
+          class="nav-item"
+          data-chat_num="{{id}}"
+          onclick="selectChat(event)"
+        >{{formatChatName chat_name}}</li>
+      {{/each}}
+    </ul>
+  </nav>
+
+  <section class="chat-info">
+    <div>
+      <p class="info-title container">{{chat_name}}</p>
+    </div>
+
+    <p class="container users-title">{{username}}</p>
+
+    <div class="user-container container">
+      <ul class="user-list">
+        {{#each chats}}
+          {{#each users}}
+            <li class="user">{{username}}</li>
+          {{/each}}
+        {{/each}}
+      </ul>
+    </div>
+
+    <div>
+      <button class="container leave-btn">Leave Chat</button>
+    </div>
+  </section>
+
+  <main>
+    <ul class="message-container">
+      {{#each chats}}
+        {{#each messages}}
+          <li class="text_message">
+            <p class="message-user">{{username}}
+              <span class="date">90/40/11</span></p>
+            <p class="message">{{text_message}}</p>
+          </li>
         {{/each}}
       {{/each}}
     </ul>
-  </div>
 
-  <div>
-    <button class="container leave-btn">Leave Chat</button>
-  </div>
-</section>
+    <form class="message-input-form">
+      <input type="text" class="message-input" placeholder="Enter Message" />
+      <button type="submit" class="send-btn"><i
+          class="fa-solid fa-paper-plane"
+        ></i></button>
+    </form>
+  </main>
 
-<main>
-  <ul class="message-container">
-    {{#each chats}}
-      {{#each messages}}
-        <li class="text_message">
-          <p class="message-user">{{#with user}}{{username}}{{/with}}
-            <span class="date">90/40/11</span></p>
-          <p class="message">{{text_message}}</p>
-        </li>
-      {{/each}}
-    {{/each}}
-  </ul>
+</div>
 
-  <form class="message-input-form">
-    <input type="text" class="message-input" placeholder="Enter Message" />
-    <button type="submit" class="send-btn"><i
-        class="fa-solid fa-paper-plane"
-      ></i></button>
-    <label for="file-input">
-      <div class="file-input">
-        <i class="fa-solid fa-plus"></i>
-        <input type="file" id="file-input" />
-      </div>
-    </label>
-  </form>
-</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascript/dashboard.js"></script>
