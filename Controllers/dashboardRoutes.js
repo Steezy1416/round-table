@@ -1,9 +1,8 @@
+const router = require('express').Router();
 const { Model } = require('sequelize');
 const sequelize = require('../Config/connection');
-const router = require('express').Router();
-const {
-  User, Message, Chat, UserChat,
-} = require('../Models');
+const { User, Message, Chat, UserChat } = require('../Models');
+const withAuth = require('../utils/auth');
 
 let globalUserData = '';
 
@@ -23,14 +22,13 @@ router.get('/', (req, res) => {
         attributes: ['id', 'text_message'],
       },
     ],
-  })
-    .then((userData) => {
-      const data = userData.map((user) => user.get({ plain: true }));
+  }).then((userData) => {
+    const data = userData.map((user) => user.get({ plain: true }));
 
-      // saves data into global variable to use in chat call
-      globalUserData = data;
-      res.render('dashboard', data[0]);
-    });
+    // saves data into global variable to use in chat call
+    globalUserData = data;
+    res.render('dashboard', data[0]);
+  });
 });
 
 router.get('/channel/:id', (req, res) => {
@@ -54,14 +52,12 @@ router.get('/channel/:id', (req, res) => {
           },
         ],
       },
-
     ],
-  })
-    .then((chatData) => {
-      const data = chatData.map((chat) => chat.get({ plain: true }));
+  }).then((chatData) => {
+    const data = chatData.map((chat) => chat.get({ plain: true }));
 
-      res.render('channel', { data: data[0], globalUserData: globalUserData[0] });
-    });
+    res.render('channel', { data: data[0], globalUserData: globalUserData[0] });
+  });
 });
 
 module.exports = router;

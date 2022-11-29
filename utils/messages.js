@@ -14,10 +14,11 @@ function getTime() {
   return `${hour}:${minute} AM`;
 }
 
-function formatMessage(username, text) {
+function formatMessage(username, text, file) {
   return {
     username,
     text,
+    file,
     time: getTime(),
   };
 }

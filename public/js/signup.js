@@ -26,8 +26,8 @@ async function signupFormHandler(event) {
     if (response.ok) {
       console.log('success');
 
-      // redirect to dashboard
-      document.location.replace('/dashboard');
+      // redirect to chatroom
+      document.location.replace('/chatroom');
     } else {
       alert(response.statusText);
     }

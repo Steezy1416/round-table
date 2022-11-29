@@ -11,4 +11,8 @@ router.get('/signup', async (req, res) => {
   res.render('signup');
 });
 
+router.get(`/chatroom`, async (req, res) => {
+  res.render(`chatroom`);
+});
+
 module.exports = router;

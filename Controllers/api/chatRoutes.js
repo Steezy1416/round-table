@@ -1,7 +1,5 @@
 const router = require('express').Router();
-const {
-  User, Chat, Message, UserChat,
-} = require('../../Models');
+const { User, Chat, Message, UserChat } = require('../../Models');
 
 // get all chats
 router.get('/', (req, res) => {

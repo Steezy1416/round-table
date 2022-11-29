@@ -1,62 +1,39 @@
-<div class="main-wrapper">
-
-  <nav class="navbar">
-    <button class="new-chat icon">&#xF4FD;</button>
-    <ul class="navbar-nav">
-      {{#each chats}}
-        <li
-          class="nav-item"
-          data-chat_num="{{id}}"
-          onclick="selectChat(event)"
-        >{{formatChatName chat_name}}</li>
-      {{/each}}
-    </ul>
-  </nav>
-
-  <section class="chat-info">
-    <div>
-      <p class="info-title container">{{chat_name}}</p>
+<div class="chat-container">
+  <header class="chat-header">
+    <h1><span class="icon">&#xF80E;</span> RoundTable</h1>
+    <div class="mainBtn-container">
+      <a id="newRoom-btn" class="main-button">New Room</a>
+      <a id="leave-btn" class="main-button">Leave Room</a>
     </div>
-
-    <p class="container users-title">{{username}}</p>
-
-    <div class="user-container container">
-      <ul class="user-list">
-        {{#each chats}}
-          {{#each users}}
-            <li class="user">{{username}}</li>
-          {{/each}}
-        {{/each}}
-      </ul>
+  </header>
+  <main class="chat-main">
+    <div class="chat-sidebar">
+      <h3><span class="icon">&#xF24B;</span> Room Name:</h3>
+      <h2 id="room-name"></h2>
+      <h3><span class="icon">&#xF4CF;</span> Users</h3>
+      <ul id="users"></ul>
     </div>
-
-    <div>
-      <button class="container leave-btn">Leave Chat</button>
-    </div>
-  </section>
-
-  <main>
-    <ul class="message-container">
-      {{#each chats}}
-        {{#each messages}}
-          <li class="text_message">
-            <p class="message-user">{{username}}
-              <span class="date">90/40/11</span></p>
-            <p class="message">{{text_message}}</p>
-          </li>
-        {{/each}}
-      {{/each}}
-    </ul>
-
-    <form class="message-input-form">
-      <input type="text" class="message-input" placeholder="Enter Message" />
-      <button type="submit" class="send-btn"><i
-          class="fa-solid fa-paper-plane"
-        ></i></button>
-    </form>
+    <div class="chat-messages"></div>
   </main>
+  <div class="chat-form-container">
+    <form id="chat-form">
+      <input
+        id="msg"
+        type="text"
+        placeholder="Enter Message"
+        required
+        autocomplete="off"
+      />
 
+      <button class="main-button"><span class="icon">&#xF6C0;</span>
+        Send</button>
+    </form>
+  </div>
 </div>
 
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js"
+  crossorigin="anonymous"
+></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/javascript/dashboard.js"></script>
+<script src="js/dashboard.js"></script>

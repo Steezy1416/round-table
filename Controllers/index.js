@@ -7,4 +7,9 @@ router.use('/api', apiRoutes);
 router.use('/', landingRoutes);
 router.use('/dashboard', dashboardRoutes);
 
+// Define catch-all for resources that don't exist
+router.use((req, res) => {
+  res.status(404).end();
+});
+
 module.exports = router;
