@@ -14,6 +14,7 @@ Chat.init(
     chat_name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
   },
   {
@@ -21,7 +22,7 @@ Chat.init(
     freezeTableName: true,
     underscored: true,
     modelName: 'chat',
-  }
+  },
 );
 
 module.exports = Chat;
