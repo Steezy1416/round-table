@@ -6,9 +6,12 @@ const {User, Message, Chat, UserChat} = require("../Models")
 let globalUserData = ''
 
 router.get("/", (req,res) => {
+
+    console.log(req.session)
+
     User.findAll({
         where: {
-            id : 1
+            id : req.session.user_id
         },
         attributes: ["id", "username", "password"],
         include: [
@@ -58,7 +61,14 @@ router.get("/channel/:id", (req, res) => {
     .then(chatData => {
         const data = chatData.map(chat => chat.get({plain: true}))
     
-        res.render("channel", {data: data[0], globalUserData: globalUserData[0]})
+        res.render("channel", {
+            data: data[0],
+            globalUserData: globalUserData[0],
+            session: sessionInfo = {
+                sessionId: req.session.user_id,
+                username: req.session.username
+            }
+        })
     })
 })
 

@@ -4,12 +4,27 @@ const path = require("path")
 const exphbs = require("express-handlebars")
 const helpers = require("./utils/formater")
 const bodyParser = require("body-parser")
+const session = require("express-session")
 
 const app = express()
 const server = require("http").createServer(app)
 const io = require("socket.io")(server)
 
 const PORT = process.env.PORT || 3001
+
+const SequelizeStore = require("connect-session-sequelize")(session.Store)
+
+const sess = {
+    secret: "The Amazing Spiderman is underated",
+    cookie: {},
+    resave: false,
+    saveUninitialized: false,
+    store: new SequelizeStore({
+        db: sequelize
+    })
+}
+
+app.use(session(sess))
 
 const hbs = exphbs.create({helpers})
 app.engine("handlebars", hbs.engine)
@@ -41,22 +56,22 @@ sequelize.sync({force: false})
             })
     
             //sends message
-            socket.on("message", ({room, message}) => {
-                socket.to(room).emit("receive-message",message)
+            socket.on("message", (data) => {
+                socket.to(data.room).emit("receive-message",data)
                 
-                socket.broadcast.emit("notification", room)
-                console.log(`Message is ${message}`)
+                socket.broadcast.emit("notification", data.room)
+                console.log(`Message is ${data.message}`)
             })
 
-            socket.on("file-message", ({room, file}) => {
-                socket.to(room).emit("receive-file", file)
+            socket.on("file-message", (data) => {
+                socket.to(data.room).emit("receive-file", data)
                 console.log("file sent")
             })
 
             //removes user
-            socket.on("left-chat", ({room, user}) => {
-                socket.to(room).emit("remove-user", (user))
-                console.log(`${user} has left the chat`)
+            socket.on("left-chat", (data) => {
+                socket.to(data.room).emit("remove-user", (data.user))
+                console.log(`${data.user} has left the chat`)
             })
         })
     })

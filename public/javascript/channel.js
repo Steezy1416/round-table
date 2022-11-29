@@ -11,10 +11,12 @@ async function joinRoom() {
     const imagePost = []
     li.forEach(elem => {
         if (elem.innerText.split("(")[0] == "url") {
-            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText })
+            const user = elem.closest("li").getElementsByClassName("message-user")[0].innerHTML.split("<")[0]
+            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText , user})
         };
     });
 
+    console.log(imagePost)
     convertFile(imagePost)
 
     if (answer.ok) {
@@ -26,7 +28,7 @@ async function joinRoom() {
 const convertFile = imagePost => {
 
     imagePost.forEach((file, index) => {
-        const { id, text } = imagePost[index]
+        const { id, text, user } = imagePost[index]
 
         const post = document.querySelector(`[data-message_id="${id}"]`)
 
@@ -38,7 +40,7 @@ const convertFile = imagePost => {
 
         let messageUser = document.createElement("p")
         messageUser.classList.add("message-user")
-        messageUser.innerText = "Spiderman"
+        messageUser.innerText = `${user}`
 
         let date = document.createElement("span")
         date.className = "date"
@@ -128,7 +130,8 @@ async function selectChat(event) {
 }
 
 //displays message on screen
-const showMessage = message => {
+const showMessage = ({message, currentUser}) => {
+
     let messageContainer = document.querySelector(".message-container")
 
     let listItem = document.createElement("li")
@@ -136,7 +139,7 @@ const showMessage = message => {
 
     let messageUser = document.createElement("p")
     messageUser.classList.add("message-user")
-    messageUser.innerText = "Spiderman"
+    messageUser.innerText = `${currentUser}`
 
     let date = document.createElement("span")
     date.className = "date"
@@ -171,6 +174,10 @@ const userLeftMessage = user => {
 //post text message to database
 async function postTextMessage(event) {
     event.preventDefault()
+    const user_id = parseInt(document.querySelector(".navbar").getAttribute("data-session_user_id"))
+
+    const currentUser = document.querySelector(".navbar").getAttribute("data-session_username")
+
     const message = document.querySelector(".message-input").value.trim()
     const chat_id = parseInt(window.location.toString().split("/")[5])
     const room = document.querySelector(".info-title").innerText
@@ -179,7 +186,7 @@ async function postTextMessage(event) {
         method: "POST",
         body: JSON.stringify({
             text_message: message,
-            user_id: 1,
+            user_id: user_id,
             chat_id: chat_id
         }),
         headers: {
@@ -189,12 +196,13 @@ async function postTextMessage(event) {
 
     const data = {
         room,
-        message
+        message,
+        currentUser
     }
 
     if (response.ok) {
         socket.emit("message", data)
-        showMessage(message)
+        showMessage(data)
         document.querySelector(".message-input").value = ''
     }
 }
@@ -252,7 +260,7 @@ async function leaveChat() {
 
         const data = {
             room: room,
-            user: user
+            user: user,
         }
 
         socket.emit("left-chat", data)
@@ -275,6 +283,8 @@ fileInput.addEventListener("change", function () {
     reader.addEventListener("load", () => {
         const uploaded_image = reader.result
 
+        const currentUser = document.querySelector(".navbar").getAttribute("data-session_username")
+
         let messageContainer = document.querySelector(".message-container")
 
         let listItem = document.createElement("li")
@@ -282,7 +292,7 @@ fileInput.addEventListener("change", function () {
 
         let messageUser = document.createElement("p")
         messageUser.classList.add("message-user")
-        messageUser.innerText = "Spiderman"
+        messageUser.innerText = `${currentUser}`
 
         let date = document.createElement("span")
         date.className = "date"
@@ -306,12 +316,14 @@ async function postFileMessage(uploaded_image) {
     const message = `url(${uploaded_image})`
     const chat_id = parseInt(window.location.toString().split("/")[5])
     const room = document.querySelector(".info-title").innerText
+    const currentUser = document.querySelector(".navbar").getAttribute("data-session_username")
+    const user_id = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
 
     const response = await fetch("/api/messages", {
         method: "POST",
         body: JSON.stringify({
             text_message: message,
-            user_id: 1,
+            user_id: user_id,
             chat_id: chat_id
         }),
         headers: {
@@ -321,7 +333,8 @@ async function postFileMessage(uploaded_image) {
 
     const data = {
         room: room,
-        file: message
+        file: message,
+        currentUser
     }
 
     if (response.ok) {
@@ -329,12 +342,12 @@ async function postFileMessage(uploaded_image) {
     }
 }
 
-socket.on("receive-file", file => {
+socket.on("receive-file", ({file, currentUser}) => {
     console.log("Received file")
-    showFile(file)
+    showFile(file, currentUser)
 })
 
-const showFile = file => {
+const showFile = (file, currentUser) => {
     let messageContainer = document.querySelector(".message-container")
 
     let listItem = document.createElement("li")
@@ -342,7 +355,7 @@ const showFile = file => {
 
     let messageUser = document.createElement("p")
     messageUser.classList.add("message-user")
-    messageUser.innerText = "Spiderman"
+    messageUser.innerText = `${currentUser}`
 
     let date = document.createElement("span")
     date.className = "date"

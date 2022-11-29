@@ -7,7 +7,7 @@
     <div class="signup">
         <section class="sign-up-container">
             <p class="sign-up-title">Sign Up!</p>
-            <form class="form">
+            <form class="form" onsubmit="signupHandler(event)">
                 <input type="text" class="username-signup input" placeholder="Create a username">
                 <br>
                 <input type="text" class="password-signup input" placeholder="Create a password">
@@ -23,7 +23,7 @@
     <div class="login hide">
             <section class="login-container">
                 <p class="log-in-title">Log In</p>
-                <form class="form">
+                <form class="form" onsubmit="loginHandler(event)">
                     <input type="text" class="username-login input" placeholder="Enter your username">
                     <br>
                     <input type="text" class="password-login input" placeholder="Enter your password">
