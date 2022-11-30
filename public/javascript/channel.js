@@ -167,6 +167,8 @@ const showMessage = ({ message, currentUser }) => {
     listItem.append(messageUser, messageParagraph)
     console.log(listItem)
     messageContainer.append(listItem)
+
+    messageContainer.scrollTop = messageContainer.scrollHeight
 }
 
 //displays text when user leaves chat
