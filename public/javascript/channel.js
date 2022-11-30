@@ -1,8 +1,4 @@
 const socket = io("http://localhost:3001")
-const newChat = document.getElementById('new-chat');
-const createChat = document.getElementById('create-chat');
-const joinChat = document.getElementById('join-chat');
-const modalOuter = document.querySelector('.modal-outer');
 
 //joins the room
 async function joinRoom() {
@@ -16,7 +12,7 @@ async function joinRoom() {
     li.forEach(elem => {
         if (elem.innerText.split("(")[0] == "url") {
             const user = elem.closest("li").getElementsByClassName("message-user")[0].innerHTML.split("<")[0]
-            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText , user})
+            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText, user })
         };
     });
 
@@ -57,7 +53,7 @@ const convertFile = imagePost => {
         messageUser.append(date)
         post.append(messageUser, displayImage)
 
-        async function convertToBlob(text){
+        async function convertToBlob(text) {
             console.log(text)
             const base64 = await fetch(text)
             const blob = await base64.blob()
@@ -134,7 +130,7 @@ async function selectChat(event) {
 }
 
 //displays message on screen
-const showMessage = ({message, currentUser}) => {
+const showMessage = ({ message, currentUser }) => {
 
     let messageContainer = document.querySelector(".message-container")
 
@@ -346,7 +342,7 @@ async function postFileMessage(uploaded_image) {
     }
 }
 
-socket.on("receive-file", ({file, currentUser}) => {
+socket.on("receive-file", ({ file, currentUser }) => {
     console.log("Received file")
     showFile(file, currentUser)
 })
@@ -372,8 +368,8 @@ const showFile = (file, currentUser) => {
     messageUser.append(date)
     listItem.append(messageUser, displayImage)
     messageContainer.append(listItem)
-    
-    async function convertToBlob(file){
+
+    async function convertToBlob(file) {
         console.log(file)
         const base64 = await fetch(file)
         const blob = await base64.blob()
@@ -386,6 +382,11 @@ const showFile = (file, currentUser) => {
 // ==========================================
 // MODAL FUNCTIONALITY
 // ==========================================
+
+const newChat = document.getElementById('new-chat');
+const createChat = document.getElementById('create-chat');
+const joinChat = document.getElementById('join-chat');
+const modalOuter = document.querySelector('.modal-outer');
 
 // newChat opens modal
 function handleModalClick() {
@@ -406,53 +407,63 @@ function handleModalClick() {
   // when you click on new chat it runs modalHandler
   newChat.addEventListener('click', handleModalClick);
   
-  function createChatHandler(event) {
+  async function createChatHandler(event) {
     event.preventDefault();
   
     const chat_name = document.querySelector('#new-chat-name').value.trim();
+    const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
+
+    const current_chat_id = parseInt(document.querySelector(".chat-info").getAttribute("data-chat_id"))
   
     // POST request to create a new chat
-    fetch('/api/chats', {
+    const response = await fetch('/api/chats', {
       method: 'POST',
-      body: JSON.stringify({ chat_name }),
+      body: JSON.stringify({
+        chat_name: chat_name,
+        user_ids: [currentUserId]
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        document.location.reload();
-      });
+    if (response.ok) {
+      document.location.replace("/dashboard")
+      document.location.replace(`/dashboard/channel/${current_chat_id}`)
+    }
+    closeModal()
   
-    closeModal();
   }
   
   // when you click on create chat it runs createChatHandler, which creates a new chat, closes modal, then joins chat
-  function joinChatHandler() {
-    const chat_id = document.querySelector('#join-chat-name').value.trim();
+  async function joinChatHandler() {
+    const chat_id = parseInt(document.querySelector('#join-chat-name').value.trim());
+    const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
+
+    const current_chat_id = parseInt(document.querySelector(".chat-info").getAttribute("data-chat_id"))
   
     // PUT request to join a chat by id
-    fetch(`/api/chats/${chat_id}`, {
+    const response = await fetch(`/api/chats/${chat_id}`, {
       method: 'PUT',
-      body: JSON.stringify({ user_ids: [1] }),
+      body: JSON.stringify({
+        user_ids: [currentUserId]
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        document.location.reload();
-      });
-  
-    closeModal();
+    if (response.ok) {
+        document.location.replace("/dashboard")
+        document.location.replace(`/dashboard/channel/${current_chat_id}`)
+    }
+    closeModal()
   }
   
   // when you click on create chat it runs createChatHandler
   createChat.addEventListener('click', createChatHandler);
   // when you click on join chat it runs joinChatHandler, and redirects to channel
   joinChat.addEventListener('click', joinChatHandler);
+
+
 
 joinRoom()
 

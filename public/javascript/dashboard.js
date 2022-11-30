@@ -39,47 +39,49 @@ modalOuter.addEventListener('click', (event) => {
 // when you click on new chat it runs modalHandler
 newChat.addEventListener('click', handleModalClick);
 
-function createChatHandler(event) {
+async function createChatHandler(event) {
   event.preventDefault();
 
   const chat_name = document.querySelector('#new-chat-name').value.trim();
+  const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
 
   // POST request to create a new chat
-  fetch('/api/chats', {
+  const response = await fetch('/api/chats', {
     method: 'POST',
-    body: JSON.stringify({ chat_name }),
+    body: JSON.stringify({
+      chat_name: chat_name,
+      user_ids: [currentUserId]
+    }),
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      document.location.reload();
-    });
+  if (response.ok) {
+    document.location.reload()
+  }
+  closeModal()
 
-  closeModal();
 }
 
 // when you click on create chat it runs createChatHandler, which creates a new chat, closes modal, then joins chat
-function joinChatHandler() {
-  const chat_id = document.querySelector('#join-chat-name').value.trim();
+async function joinChatHandler() {
+  const chat_id = parseInt(document.querySelector('#join-chat-name').value.trim());
+  const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
 
   // PUT request to join a chat by id
-  fetch(`/api/chats/${chat_id}`, {
+  const response = await fetch(`/api/chats/${chat_id}`, {
     method: 'PUT',
-    body: JSON.stringify({ user_ids: [1] }),
+    body: JSON.stringify({
+      user_ids: [currentUserId]
+    }),
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      document.location.reload();
-    });
-
-  closeModal();
+  if (response.ok) {
+    document.location.reload()
+  }
+  closeModal()
 }
 
 // when you click on create chat it runs createChatHandler

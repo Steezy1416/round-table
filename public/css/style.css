@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: #403c3b;
+  background-color: #222831;
 }
 
 main {
@@ -18,13 +18,13 @@ main {
   padding: 15px 20px;
   font-size: 30px;
   border-radius: 17px;
-  background-color: #4dc70c;
+  background-color: #00ADB5;
   color: white;
   border: none;
 }
 
 .new-chat:hover {
-  background-color: #3ea10a;
+  background-color: #00acb581;
 }
 
 .navbar {
@@ -127,14 +127,10 @@ main {
 }
 
 /* =========================================================
-
-
-
-
 ========================================================= */
 
 .chat-info {
-  background-color: #2e2c2c;
+  background-color: #393E46;
   width: 12rem;
   height: 100vh;
   position: fixed;
@@ -195,10 +191,6 @@ main {
 }
 
 /* =========================================================
-
-
-
-
 ========================================================= */
 
 .message-container {
@@ -271,10 +263,7 @@ main {
 }
 
 /* =========================================================
-
-
 sending files
-
 ========================================================= */
 
 .form-container {
@@ -428,4 +417,15 @@ login page
    box-sizing: border-box;
    background-color: #EEEEEE;
    color: #00ADB5;
+}
+
+
+#image-dash img{
+  max-height: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  align-content: center;
+  padding-top: 225px;
 }
