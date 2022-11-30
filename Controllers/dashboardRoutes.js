@@ -47,7 +47,7 @@ router.get("/channel/:id", (req, res) => {
             },
             {
                 model: Message,
-                attributes: ["id", "text_message", "user_id"],
+                attributes: ["id", "text_message", "user_id", "created_at"],
                 include: [
                     {
                         model: User,
@@ -60,6 +60,8 @@ router.get("/channel/:id", (req, res) => {
     })
     .then(chatData => {
         const data = chatData.map(chat => chat.get({plain: true}))
+
+        console.log(data[0])
     
         res.render("channel", {
             data: data[0],

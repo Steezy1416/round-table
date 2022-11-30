@@ -1,5 +1,17 @@
 const socket = io("http://localhost:3001")
 
+const getDateTime = () => {
+    const month = new Date().getMonth() + 1
+    const day = new Date().getDate()
+    const year = new Date().getFullYear()
+    let hours = new Date().getHours()
+    const ampm = hours >= 12 ? "pm" : "am"
+    hours = hours % 12
+    let minutes = String(new Date().getMinutes()).padStart(2, "0")
+
+    return `${month}/${day}/${year}   ${hours}:${minutes}${ampm}`
+}
+
 //joins the room
 async function joinRoom() {
     const input = document.querySelector(".message-input")
@@ -12,7 +24,8 @@ async function joinRoom() {
     li.forEach(elem => {
         if (elem.innerText.split("(")[0] == "url") {
             const user = elem.closest("li").getElementsByClassName("message-user")[0].innerHTML.split("<")[0]
-            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText, user })
+            const dateTime = elem.closest("li").getElementsByClassName("date")[0].innerText
+            imagePost.push({ id: elem.attributes[1].value, text: elem.innerText, user, dateTime })
         };
     });
 
@@ -28,7 +41,7 @@ async function joinRoom() {
 const convertFile = imagePost => {
 
     imagePost.forEach((file, index) => {
-        const { id, text, user } = imagePost[index]
+        const { id, text, user, dateTime } = imagePost[index]
 
         const post = document.querySelector(`[data-message_id="${id}"]`)
 
@@ -44,7 +57,7 @@ const convertFile = imagePost => {
 
         let date = document.createElement("span")
         date.className = "date"
-        date.innerText = "90/40/11"
+        date.innerText = `${dateTime}`
 
         let displayImage = document.createElement("div")
         displayImage.className = "message display-image"
@@ -143,7 +156,7 @@ const showMessage = ({ message, currentUser }) => {
 
     let date = document.createElement("span")
     date.className = "date"
-    date.innerText = "90/40/11"
+    date.innerText = `${getDateTime()}`
 
     let messageParagraph = document.createElement("p")
     messageParagraph.className = "message"
@@ -296,7 +309,7 @@ fileInput.addEventListener("change", function () {
 
         let date = document.createElement("span")
         date.className = "date"
-        date.innerText = "90/40/11"
+        date.innerText = `${getDateTime()}`
 
         let displayImage = document.createElement("div")
         displayImage.className = "message display-image"
@@ -359,7 +372,7 @@ const showFile = (file, currentUser) => {
 
     let date = document.createElement("span")
     date.className = "date"
-    date.innerText = "90/40/11"
+    date.innerText = `${getDateTime()}`
 
     let displayImage = document.createElement("div")
     displayImage.className = "message display-image"
@@ -391,79 +404,80 @@ const modalOuter = document.querySelector('.modal-outer');
 // newChat opens modal
 function handleModalClick() {
     modalOuter.classList.add('open');
-  }
-  
-  // createChat closes modal
-  function closeModal() {
+}
+
+// createChat closes modal
+function closeModal() {
     modalOuter.classList.remove('open');
-  }
-  
-  modalOuter.addEventListener('click', (event) => {
+}
+
+modalOuter.addEventListener('click', (event) => {
     const isOutside = !event.target.closest('.modal-inner');
     if (isOutside) {
-      closeModal();
+        closeModal();
     }
-  });
-  // when you click on new chat it runs modalHandler
-  newChat.addEventListener('click', handleModalClick);
-  
-  async function createChatHandler(event) {
+});
+// when you click on new chat it runs modalHandler
+newChat.addEventListener('click', handleModalClick);
+
+async function createChatHandler(event) {
     event.preventDefault();
-  
+
     const chat_name = document.querySelector('#new-chat-name').value.trim();
     const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
 
     const current_chat_id = parseInt(document.querySelector(".chat-info").getAttribute("data-chat_id"))
-  
+
     // POST request to create a new chat
     const response = await fetch('/api/chats', {
-      method: 'POST',
-      body: JSON.stringify({
-        chat_name: chat_name,
-        user_ids: [currentUserId]
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    if (response.ok) {
-      document.location.replace("/dashboard")
-      document.location.replace(`/dashboard/channel/${current_chat_id}`)
-    }
-    closeModal()
-  
-  }
-  
-  // when you click on create chat it runs createChatHandler, which creates a new chat, closes modal, then joins chat
-  async function joinChatHandler() {
-    const chat_id = parseInt(document.querySelector('#join-chat-name').value.trim());
-    const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
-
-    const current_chat_id = parseInt(document.querySelector(".chat-info").getAttribute("data-chat_id"))
-  
-    // PUT request to join a chat by id
-    const response = await fetch(`/api/chats/${chat_id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        user_ids: [currentUserId]
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+        method: 'POST',
+        body: JSON.stringify({
+            chat_name: chat_name,
+            user_ids: [currentUserId]
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
     if (response.ok) {
         document.location.replace("/dashboard")
         document.location.replace(`/dashboard/channel/${current_chat_id}`)
     }
     closeModal()
-  }
-  
-  // when you click on create chat it runs createChatHandler
-  createChat.addEventListener('click', createChatHandler);
-  // when you click on join chat it runs joinChatHandler, and redirects to channel
-  joinChat.addEventListener('click', joinChatHandler);
+
+}
+
+// when you click on create chat it runs createChatHandler, which creates a new chat, closes modal, then joins chat
+async function joinChatHandler() {
+    const chat_id = parseInt(document.querySelector('#join-chat-name').value.trim());
+    const currentUserId = parseInt(document.querySelector(".navbar").getAttribute("data-user_id"))
+
+    const current_chat_id = parseInt(document.querySelector(".chat-info").getAttribute("data-chat_id"))
+
+    // PUT request to join a chat by id
+    const response = await fetch(`/api/chats/${chat_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            user_ids: [currentUserId]
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    if (response.ok) {
+        document.location.replace("/dashboard")
+        document.location.replace(`/dashboard/channel/${current_chat_id}`)
+    }
+    closeModal()
+}
+
+// when you click on create chat it runs createChatHandler
+createChat.addEventListener('click', createChatHandler);
+// when you click on join chat it runs joinChatHandler, and redirects to channel
+joinChat.addEventListener('click', joinChatHandler);
 
 
 
 joinRoom()
+
 

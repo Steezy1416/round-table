@@ -1,72 +1,22 @@
 <nav class="navbar" data-user_id="{{id}}">
-  <button class="new-chat" id="new-chat"><i
-      class="fa-thin fa-plus"
-    ></i></button>
+  <button class="new-chat" id="new-chat"><i class="fa-thin fa-plus"></i></button>
   <ul class="navbar-nav">
     {{#each chats}}
-      <li
-        class="nav-item"
-        data-chat_num="{{id}}"
-        onclick="selectChat(event)"
-      >{{formatChatName chat_name}}</li>
+    <li class="nav-item" data-chat_num="{{id}}" onclick="selectChat(event)">{{formatChatName chat_name}}</li>
     {{/each}}
   </ul>
 </nav>
 
-<section class="chat-info">
-  <div>
-    <p class="info-title container">{{chat_name}}</p>
-  </div>
-
-  <p class="container users-title">{{username}}</p>
-
-  <div class="user-container container">
-    <ul class="user-list">
-      {{#each chats}}
-        {{#each users}}
-          <li class="user">{{username}}</li>
-        {{/each}}
-      {{/each}}
-    </ul>
-  </div>
-
-  <div>
-    <button class="container leave-btn">Leave Chat</button>
-  </div>
-</section>
-
-<main>
-  <ul class="message-container">
-    {{#each chats}}
-      {{#each messages}}
-        <li class="text_message">
-          <p class="message-user">{{username}}
-            <span class="date">90/40/11</span></p>
-          <p class="message">{{text_message}}</p>
-        </li>
-      {{/each}}
-    {{/each}}
-  </ul>
-
-  <form class="message-input-form">
-    <input type="text" class="message-input" placeholder="Enter Message" />
-    <button type="submit" class="send-btn"><i
-        class="fa-solid fa-paper-plane"
-      ></i></button>
-  </form>
-</main>
+<div id="image-dash">
+  <img src="/images/logo.png" alt="">
+</div>
 
 <div class="modal-outer">
   <div class="modal-inner">
     <div class="modal-section">
       <h1 class="modal-header">Please enter new chat name.</h1>
       <form class="create-chat-form">
-        <input
-          type="text"
-          class="create-chat-input"
-          placeholder="Enter Chat Name"
-          id="new-chat-name"
-        />
+        <input type="text" class="create-chat-input" placeholder="Enter Chat Name" id="new-chat-name" />
         <button type="submit" class="create-chat-btn" id="create-chat">Create
           Chat</button>
       </form>
@@ -74,12 +24,7 @@
     <div class="modal-section">
       <h1 class="modal-header">Know the chat number ID?</h1>
       <form class="create-chat-form">
-        <input
-          type="number"
-          class="join-chat-input"
-          placeholder="Enter Chat ID"
-          id="join-chat-name"
-        />
+        <input type="number" class="join-chat-input" placeholder="Enter Chat ID" id="join-chat-name" />
         <button type="submit" class="join-chat-btn" id="join-chat">Join Chat</button>
       </form>
     </div>

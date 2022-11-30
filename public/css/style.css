@@ -177,6 +177,13 @@ main {
   width: 0px;
 }
 
+#chat-id {
+  text-align: center;
+  margin: 0 auto;
+  color: white;
+  margin-bottom: 5px;
+}
+
 .leave-btn {
   padding: 8px;
   background: none;
