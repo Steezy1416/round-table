@@ -443,7 +443,9 @@ async function createChatHandler(event) {
     })
     if (response.ok) {
         document.location.replace("/dashboard")
+        document.location.reload()
         document.location.replace(`/dashboard/channel/${current_chat_id}`)
+        document.location.reload()
     }
     closeModal()
 
@@ -468,7 +470,9 @@ async function joinChatHandler() {
     })
     if (response.ok) {
         document.location.replace("/dashboard")
+        document.location.reload()
         document.location.replace(`/dashboard/channel/${current_chat_id}`)
+        document.location.reload()
     }
     closeModal()
 }
