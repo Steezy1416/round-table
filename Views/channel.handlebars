@@ -1,7 +1,7 @@
 <nav class="navbar" {{#with globalUserData}} data-user_id="{{id}}" data-user_name="{{username}}" {{/with}} {{#with session}}
  data-session_user_id="{{sessionId}}" data-session_username="{{username}}" 
  {{/with}}>
-    <button class="new-chat"><i class="fa-thin fa-plus"></i></button>
+    <button class="new-chat" id="new-chat"><i class="fa-thin fa-plus"></i></button>
     <ul class="navbar-nav">
         {{#each globalUserData.chats}}
         <li class="nav-item" data-chat_num="{{id}}" data-chatName="{{chat_name}}" onclick="selectChat(event)">
@@ -52,6 +52,37 @@
         </form>
     </div>
 </main>
+
+
+<div class="modal-outer">
+  <div class="modal-inner">
+    <div class="modal-section">
+      <h1 class="modal-header">Please enter new chat name.</h1>
+      <form class="create-chat-form">
+        <input
+          type="text"
+          class="create-chat-input"
+          placeholder="Enter Chat Name"
+          id="new-chat-name"
+        />
+        <button type="submit" class="create-chat-btn" id="create-chat">Create
+          Chat</button>
+      </form>
+    </div>
+    <div class="modal-section">
+      <h1 class="modal-header">Know the chat number ID?</h1>
+      <form class="create-chat-form">
+        <input
+          type="number"
+          class="join-chat-input"
+          placeholder="Enter Chat ID"
+          id="join-chat-name"
+        />
+        <button type="submit" class="join-chat-btn" id="join-chat">Join Chat</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascript/channel.js"></script>
