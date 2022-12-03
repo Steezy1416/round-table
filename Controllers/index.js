@@ -4,7 +4,7 @@ const dashboardRoutes = require("./dashboardRoutes")
 const loginRoutes = require("./loginRoutes")
 
 router.use("/api", apiRoutes)
-router.use("/login", loginRoutes)
+router.use("/", loginRoutes)
 router.use("/dashboard", dashboardRoutes)
 
 module.exports = router
