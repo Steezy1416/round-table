@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS round_table;
+
+CREATE DATABASE round_table;
