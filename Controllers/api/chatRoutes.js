@@ -1,4 +1,4 @@
-const { User, Chat, Message, UserChat } = require("../../Models")
+const { User, Chat, Message, UserChat } = require("../../models")
 const router = require("express").Router()
 
 //get all chats

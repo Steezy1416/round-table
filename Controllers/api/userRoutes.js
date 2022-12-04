@@ -1,4 +1,4 @@
-const {User, Chat, Message} = require("../../Models")
+const {User, Chat, Message} = require("../../models")
 const router = require("express").Router()
 
 //get all users

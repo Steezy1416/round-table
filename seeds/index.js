@@ -3,7 +3,7 @@ const seedMessages = require("./message-seeds")
 const seedChats = require("./chat-seeds")
 const seedUserChats = require("./userChat-seeds")
 
-const sequelize = require("../Config/connection")
+const sequelize = require("../config/connection")
 
 const seedAll = async () => {
     await sequelize.sync({force: true})

@@ -1,11 +1,11 @@
-const {User} = require("../Models")
+const {User} = require("../models")
 const router = require("express").Router()
 
 router.get("/", (req, res) => {
     res.render("login")
 })
 
-router.post("/users", (req, res) => {
+router.post("/", (req, res) => {
     User.findOne({
         where: {
             username: req.body.username,

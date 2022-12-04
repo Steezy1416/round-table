@@ -1,4 +1,4 @@
-const {Message} = require("../Models")
+const {Message} = require("../models")
 
 const messageData = [
     {

@@ -1,7 +1,7 @@
 const { Model } = require("sequelize")
-const sequelize = require("../Config/connection")
+const sequelize = require("../config/connection")
 const router = require("express").Router()
-const {User, Message, Chat, UserChat} = require("../Models")
+const {User, Message, Chat, UserChat} = require("../models")
 
 let globalUserData = ''
 
