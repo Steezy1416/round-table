@@ -1,5 +1,5 @@
 const express = require("express")
-const sequelize = require("./config/connection")
+const sequelize = require("./configuration/connection")
 const path = require("path")
 const exphbs = require("express-handlebars")
 const helpers = require("./utils/formater")
@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 // app.use(express.urlencoded({ extended: false}))
 app.use(express.static(path.join(__dirname, "public")))
 
-app.use(require("./controllers/index"))
+app.use(require("./controller/index"))
 
 sequelize.sync({force: false})
 .then(() => {

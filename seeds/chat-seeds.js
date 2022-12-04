@@ -1,4 +1,4 @@
-const {Chat} = require("../models")
+const {Chat} = require("../model")
 
 const chatData = [
     {
