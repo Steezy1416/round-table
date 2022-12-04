@@ -13,8 +13,9 @@ router.post("/", (req, res) => {
         }
     })
     .then(userData => {
-        if(!userData.username){
-            res.status(404).json({message: "user not found"})
+        console.log(userData)
+        if(!userData){
+            res.status(404).json({mesage: "User not found, please try again"})
             return
         }
 
