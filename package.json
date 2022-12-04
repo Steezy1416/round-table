@@ -15,6 +15,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
+    "start": "node server.js",
     "astra": "nodemon server.js",
     "seeds": "node seeds/index.js"
   }
