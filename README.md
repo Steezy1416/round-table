@@ -1,16 +1,23 @@
 # Round Table
 
-## Description
+## Overview
 
-We have created a chat application for the business users. In this chat application you will be able to create chatrooms for different projects and different groups. You are able to also able to join chatrooms via chat IDs.
+The Round Table is an application that allows users to create and join new chat rooms and communicate real time with other users using the socket.io package.
 
-You will be able to create a unique user ID for each users. User are able to send attachments via chatroom to each other or to their groups.
+### Our goals are to...
 
-## Table of Contents 📖
+* Allow the user to send and receive real time messages
+* Allow the user to create, join, and leave chats
+* Allow the user to send images
+* Allow the user to be a part of multiple chats
 
-- [Usage ](#Usage-)
-- [NPM packages used ](#NPM)
-- [Credits ](#Credits-)
+---
+
+## Preview
+
+![roundTable](https://user-images.githubusercontent.com/105886307/205521877-a498a78a-d3e9-4bb0-b2eb-775713de3a0a.jpg)
+
+---
 
 ## Usage
 
@@ -26,7 +33,9 @@ If you want to use the chat application :
 - Step 3
   - Add people to your chatroom.
 - Step 4
-  - Enjoy chatting with your business colleagues and collabing with each other on different projects and business needs.
+  - Enjoy chatting with your colleagues and collaborating with each other on different projects and needs.
+
+---
 
 ## NPM packages used
 
@@ -37,10 +46,18 @@ If you want to use the chat application :
 - Sequelizer
 - Dotenv
 
+---
+
 ## Credits
 
-Thanks to the following people who helped me in this project:
+Thanks to the following people who worked on this project!
 
 - Alex Fortin
 - Alishah Hashwani
 - Mark DeKraker
+
+---
+
+## Where can I view this application?
+
+To view this application you can go to the [round-table](https://round-table14.herokuapp.com/) website
